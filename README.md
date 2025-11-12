@@ -1,132 +1,139 @@
-<p align="center">
-  <img src="src/front/assets/brand-name-dark.svg" alt="Waypoint App" width="300" />
-</p>
+# Waypoint · Explora ciudades, crea rutas y comparte experiencias
 
-<div align="center">
-   
-[![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black&style=for-the-badge)](https://reactjs.org/)
-[![Flask](https://img.shields.io/badge/Flask-000000?logo=flask&logoColor=white&style=for-the-badge)](https://flask.palletsprojects.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?logo=postgresql&logoColor=white&style=for-the-badge)](https://www.postgresql.org/)
-[![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?logo=bootstrap&logoColor=white&style=for-the-badge)](https://getbootstrap.com/)
-[![Leaflet](https://img.shields.io/badge/Leaflet-199900?logo=leaflet&logoColor=white&style=for-the-badge)](https://leafletjs.com/)
+Rutas turísticas interactivas con React + Vite en el frontend y Flask en el backend. Mapa con Leaflet, votos con estrellas, favoritos, clima y autenticación JWT.
 
+[![Made with Flask](https://img.shields.io/badge/Flask-API-000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/) [![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=000)](https://react.dev/) [![Vite](https://img.shields.io/badge/Vite-4-646cff?logo=vite&logoColor=fff)](https://vitejs.dev/) [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-DB-336791?logo=postgresql&logoColor=fff)](https://www.postgresql.org/) [![Render](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?logo=render&logoColor=fff)](https://render.com)
 
-**A full-stack web application for discovering and creating custom travel routes with interactive maps, POI (Points of Interest) management, and community-driven ratings.**
-</div>
+---
 
-## 📖 About Waypoint
+## ✨ Características
 
-**Waypoint** is a modern travel route planning platform that allows users to discover, create, and share custom travel routes. Whether you're planning a city tour, a hiking trail, or a food adventure, Waypoint provides the tools to create detailed, interactive routes that can be shared with the community.
+- Mapa interactivo con Leaflet (react-leaflet) y clustering de marcadores.
+- Creación de rutas con puntos de interés (POIs) y guardado de coordenadas.
+- Sistema de votos con estrellas y favoritos por usuario.
+- Autenticación con JWT (login, registro, perfil).
+- Widget de clima y utilidades de geocodificación (Nominatim/Overpass).
+- API REST en Flask con SQLAlchemy y migraciones (Alembic).
+- Despliegue sencillo en Render con base de datos gestionada.
 
-### 🎯 Key Highlights
+## 🧭 Arquitectura
 
-- **Interactive Map Creation**: Build routes by selecting POIs directly on an interactive Leaflet map with Nominatim geocoding.
-- **Smart POI Discovery**: Search and filter attractions, restaurants, parks, monuments, and more using OpenStreetMap data.
-- **Community-Driven**: Rate, favorite, and explore routes created by other users.
-- **Real-Time Weather**: Get weather forecasts for your selected destinations.
-- **Routing Options**: Calculate distances and visualize routes via car, bike, or walking.
-- **Responsive Design**: Fully optimized for desktop, tablet, and mobile devices.
+- Frontend: React + Vite en `src/front`.
+- Backend: Flask en `src/` con blueprints en `src/api`.
+- Persistencia: PostgreSQL (Render) o SQLite local de respaldo.
+- Servido en producción por Gunicorn, estáticos servidos desde `public/`.
 
-## ✨ Features
+Estructura parcial del proyecto:
 
-### 📍 Create Route Page
+```text
+src/
+  app.py                 # Configuración Flask, CORS, JWT y estáticos
+  wsgi.py                # Entrada para Gunicorn
+  api/
+    routes/              # Endpoints REST (auth, rutas, votos, favoritos, etc.)
+    models.py            # Modelos SQLAlchemy
+    commands.py          # Comandos: seed, insert-test-data, reset-db...
+front/
+  pages/, components/, services/, hooks/, utils/
+public/                  # Se genera desde Vite (dist → public en producción)
+```
 
-The heart of Waypoint - an intuitive route builder with powerful features:
+## ⚙️ Requisitos
 
-- **Location Selection**
-  - Quick access to popular destinations via visual cards.
-  - Search for any location worldwide using Nominatim geocoding.
+- Python 3.10
+- Node.js 20+
+- Pipenv
+- PostgreSQL (recomendado en producción) o SQLite local
 
-- **Interactive Map Interface**
-  - Search and discover POIs near your location with a real-time map powered by Leaflet and OpenStreetMap.
-  - Categories like Attractions, Museums, Restaurants, Cafes, Bars, Parks, Monuments, and more.
-  - Click to add POIs markers to your route with automatic ordering.
+## 🔑 Variables de entorno (backend)
 
-- **Route Visualization**
-  - Calculate route distance and duration for multiple transport options (Car, Walking, Bike).
-  - Interactive polyline rendering between POIs for standard size and full screen maps.
+Crea un archivo `.env` en la raíz con al menos:
 
-### 🔎  Explore Page
+```ini
+FLASK_DEBUG=1
+JWT_SECRET_KEY=tu_clave_segura
+# Para Postgres local
+# DATABASE_URL=postgresql://usuario:password@localhost:5432/waypoint
+# Si no está definida, se usará SQLite (archivo waypoint.db)
+```
 
-Discover routes created by the community with smart filtering:
+Frontend (opcional):
 
-- **Search & Filter**
-  - Fast access to popular country and city cards to quickly select your destination.
-  - Search for cities manually to explore routes created by other users at that destination.
+- `VITE_BACKEND_URL` → URL del backend si el frontend se despliega por separado.
+- Si no se define, el front usa automáticamente el mismo dominio del navegador (ideal cuando Flask sirve la SPA).
 
-- **Weather Integration**
-  - Real-time weather widget that updates automatically when the destination changes.
-  - Displays temperature, conditions, humidity, wind speed, and a three-day forecast.
-
-### 🏆 Trending Page
-
-Discover the best routes ranked by the community:
-
-- **Top 5 Routes**
-  - Routes ranked by average rating. 🥇 🥈 🥉
-  - Secondary sorting by total votes, and tertiary sorting by creation date.
-  - View route details with integrated full screen map.
- 
-### 🙋‍♂️ Profile Page
-
-Manage your routes and track your travel planning journey:
-
-- **My Routes**
-  - Browse all your created routes and see favorites you've saved from others.
-  - Interactive route cards with expandable POI lists and statistics.
-  - Delete routes you no longer need.
-
-### 👤 Additional Features
-
-- **User Experience**
-  - Dark mode support with persistent theme.
-  - Fully responsive design (mobile, tablet, desktop).
-  - Guest browsing with read-only route preview.
-  - Problem reporting system for app issues.
-
-## 🛠️ Tech Stack
-
-### Frontend
-
-- **Framework**: React 18.2 with Hooks (useState, useEffect, useReducer, useContext).
-- **Build Tool**: Vite 4.4 for lightning-fast development.
-- **Routing**: React Router v6 for SPA navigation.
-- **Maps**: Leaflet + React-Leaflet for interactive maps.
-- **Geocoding**: Nominatim API for location search.
-- **Routing**: OpenRouteService for route calculations.
-- **Icons**: Lucide React for modern, customizable icons.
-- **Styling**: Bootstrap 5.3 + Custom CSS.
-- **State Management**: Context API (AuthContext, StoreContext).
-- **HTTP Client**: Fetch API with custom service layer.
+## 🚀 Ejecución local
 
 ### Backend
 
-- **Framework**: Flask 1.1.2 (Python web microframework).
-- **ORM**: SQLAlchemy 1.3.23 with Alembic migrations.
-- **Database**: PostgreSQL (production) / SQLite (development).
-- **Authentication**: JWT-based token system.
-- **Password Hashing**: Flask-Bcrypt.
-- **CORS**: Flask-CORS for cross-origin requests.
-- **Environment Config**: python-dotenv.
+```bash
+pipenv install
+pipenv run upgrade   # aplica migraciones existentes
+pipenv run start     # levanta Flask en http://127.0.0.1:3001
+```
 
-### External APIs
+### Frontend (modo desarrollo con Vite)
 
-- **Nominatim**: Geocoding and reverse geocoding.
-- **OpenRouteService**: Route calculation (car, bike, walking).
-- **OpenWeatherMap**: Real-time weather data.
-- **Unsplash**: POI image sourcing.
-- **OpenStreetMap**: POI data and location search.
+```bash
+npm install
+npm run dev          # http://127.0.0.1:3000
+```
 
-## 👨‍💻 Creators
+### Semillas de datos (opcional)
 
-**Egor Ulybin**: [@eulybin](https://github.com/eulybin)  
-**Victor Moreno Cabello**: [@VictorPko73](https://github.com/VictorPko73)
+```bash
+pipenv run insert-test-data
+# o comandos individuales
+flask seed-routes
+flask insert-test-users 5
+```
 
-## Acknowledgments
+> Nota: Si cambias modelos, usa `pipenv run migrate` y luego `pipenv run upgrade`.
 
-- **4Geeks Academy** - Initial React-Flask template.
-- **OpenStreetMap** - Map data and POI information.
-- **Leaflet** - Interactive mapping library.
-- **Unsplash** - High-quality POI images.
-- **OpenRouteService** - Route calculation API.
-- **OpenWeatherMap** - Weather data API.
+## ☁️ Despliegue en Render
+
+Este repo incluye `render.yaml` para desplegar con Blueprint:
+
+1. En Render: New → Blueprint → selecciona este repo.
+2. El blueprint creará:
+   - Web Service (Python) con build `./render_build.sh` y start `gunicorn wsgi --chdir ./src/`.
+   - Base de datos PostgreSQL y la enlazará como `DATABASE_URL`.
+3. Variables sugeridas en el servicio:
+   - `JWT_SECRET_KEY` (segura)
+   - `FLASK_DEBUG=0` en producción
+   - `PYTHON_VERSION=3.10.6` (ya en render.yaml)
+4. Deploy. El script de build:
+   - Construye el front (Vite) y mueve `dist/` a `public/`.
+   - Instala dependencias con Pipenv.
+   - Ejecuta migraciones (`flask db upgrade`).
+
+Si prefieres front y back en servicios separados, define `VITE_BACKEND_URL` en el sitio estático con la URL del backend.
+
+## 🔌 Endpoints principales (resumen)
+
+- Auth: `/api/register`, `/api/login`, `/api/profile`
+- Rutas: `/api/routes`, `/api/routes/<id>`, `/api/routes/city/<city>`
+- Votos: `/api/votes`, `/api/votes/route/<routeId>`
+- Favoritos: `/api/routes/<routeId>/favorite`
+- Externas: `/api/external/weather/<city>`, `/api/external/geocode/<location>`
+
+Consulta los blueprints en `src/api/routes/` para el detalle completo.
+
+## 🧪 Utilidades de desarrollo
+
+- Reset de DB: `flask reset-db`
+- Crear admin: `flask create-admin "Nombre" email@dominio.com password`
+- Scripts extra en `Pipfile` ([scripts] sección)
+
+## 📚 Recursos
+
+- Guía de backend: `docs/BACKEND_SETUP_GUIDE.md`
+- Pruebas con Postman: `docs/POSTMAN_TESTING_GUIDE.md`
+
+## 📄 Licencia
+
+ISC. Consulta `package.json` para más detalles.
+
+---
+
+Hecho con ❤️ para explorar el mundo, una ruta a la vez.
