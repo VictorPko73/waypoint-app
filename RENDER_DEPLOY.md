@@ -11,14 +11,14 @@
 
 ### 2️⃣ Configuración Básica
 
-| Campo | Valor |
-|-------|-------|
-| **Name** | `waypoint-app` (o el nombre que prefieras) |
-| **Region** | Selecciona la región más cercana |
-| **Branch** | `develop` (o `main`) |
-| **Runtime** | `Python 3` |
-| **Build Command** | `./render_build.sh` |
-| **Start Command** | `gunicorn --bind 0.0.0.0:$PORT wsgi:app` |
+| Campo             | Valor                                      |
+| ----------------- | ------------------------------------------ |
+| **Name**          | `waypoint-app` (o el nombre que prefieras) |
+| **Region**        | Selecciona la región más cercana           |
+| **Branch**        | `develop` (o `main`)                       |
+| **Runtime**       | `Python 3`                                 |
+| **Build Command** | `./render_build.sh`                        |
+| **Start Command** | `gunicorn --bind 0.0.0.0:$PORT wsgi:app`   |
 
 ### 3️⃣ Variables de Entorno
 
@@ -94,10 +94,12 @@ Una vez completado el deploy:
 Una vez deployado, puedes acceder con:
 
 ### Usuario Administrador
+
 - **Email**: `admin@waypoint.com`
 - **Password**: El valor de `ADMIN_PASSWORD` (por defecto: `WaypointAdmin2025!`)
 
 ### Usuarios Normales
+
 - **Email**: `maria@waypoint.com` | **Password**: `WaypointUser2025!`
 - **Email**: `juan@waypoint.com` | **Password**: `WaypointUser2025!`
 - **Email**: `ana@waypoint.com` | **Password**: `WaypointUser2025!`
@@ -123,6 +125,7 @@ El script de inicialización crea automáticamente:
 Para actualizar la aplicación:
 
 1. Haz push de tus cambios a la rama configurada:
+
    ```bash
    git push origin develop
    ```
@@ -132,18 +135,22 @@ Para actualizar la aplicación:
 ## 🛠️ Troubleshooting
 
 ### Error: "DATABASE_URL not found"
+
 - Asegúrate de haber creado la base de datos PostgreSQL
 - Verifica que la variable `DATABASE_URL` esté configurada en Environment
 
 ### Error: "PyYAML build failed"
+
 - ✅ Ya solucionado - `Pipfile` configurado para Python 3.11
 - ✅ `requirements.txt` actualizado con PyYAML 6.0.1
 
 ### La app no muestra datos
+
 - Revisa los logs de deploy: busca "🌱 Inicializando datos por defecto"
 - Puedes ejecutar manualmente: `flask insert-test-data` desde Render Shell
 
 ### Cambiar contraseña de admin
+
 1. Ve a Environment en Render
 2. Cambia `ADMIN_PASSWORD`
 3. Redeploy (o espera a que se reinicie)
@@ -151,17 +158,20 @@ Para actualizar la aplicación:
 ## 📝 Comandos Útiles
 
 ### Acceder a Shell en Render
+
 ```bash
 # En Render Dashboard → Shell
 flask shell
 ```
 
 ### Regenerar datos (desde Shell)
+
 ```bash
 flask insert-test-data
 ```
 
 ### Ver estadísticas de la BD
+
 ```bash
 flask shell
 >>> from api.models import User, Route, Vote
