@@ -5,6 +5,14 @@ set -o errexit
 npm install
 npm run build
 
-pipenv install
+# Actualizar pip antes de instalar pipenv
+pip install --upgrade pip
 
+# Instalar o actualizar pipenv
+pip install --upgrade pipenv
+
+# Instalar dependencias desde Pipfile
+pipenv install --deploy
+
+# Ejecutar migraciones
 pipenv run upgrade
